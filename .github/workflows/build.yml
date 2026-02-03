@@ -17,6 +17,12 @@ jobs:
       - run: npm install
       - run: npm run build
 
+      - name: Copy build to public
+        run: |
+          rm -rf public
+          mkdir public
+          cp -r dist/* public/
+
       - name: Commit build output
         run: |
           git config user.name "github-actions"
