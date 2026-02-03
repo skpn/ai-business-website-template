@@ -1,0 +1,38 @@
+name: Build Site
+
+on:
+  push:
+    branches: [ staging, main ]
+    paths-ignore:
+        - 'public/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - run: npm install
+      - run: npm run build
+
+      - name: Copy build to public
+        run: |
+          rm -rf public
+          mkdir public
+          cp -r static/* public/
+
+      - name: Commit build output
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}
+          git add public
+          git commit -m "Build site" || echo "No changes"
+          git push
+        
