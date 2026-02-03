@@ -23,7 +23,7 @@ jobs:
         run: |
           rm -rf public
           mkdir public
-          cp -r dist/* public/
+          cp -r static/* public/
 
       - name: Commit build output
         run: |
