@@ -3,6 +3,8 @@ name: Build Site
 on:
   push:
     branches: [ staging, main ]
+    paths-ignore:
+        - 'public/**'
 
 jobs:
   build:
